@@ -66,8 +66,7 @@ web server or build tool is required on the client.
 
 To enable deployment, open **Settings → Pages → Build and deployment →
 Source → GitHub Actions** in your GitHub repository, then push to `main`.
-For a normal project repository named `perl-codemap`, the site will typically
-be available at `https://YOUR-USERNAME.github.io/perl-codemap/`.
+The live sample is available at **[https://interrupt21h.github.io/perl-codemap/](https://interrupt21h.github.io/perl-codemap/)**.
 
 The workflow deliberately scans only the synthetic example and uploads
 only `_site`, never the repository root, JSON exports, or internal source trees.
