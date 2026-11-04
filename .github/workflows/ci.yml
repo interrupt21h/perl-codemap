@@ -1,0 +1,44 @@
+name: CI
+on:
+  push:
+  pull_request:
+permissions:
+  contents: read
+jobs:
+  perl:
+    runs-on: ubuntu-latest
+    strategy:
+      fail-fast: false
+      matrix:
+        perl: ['5.32', '5.40']
+        parser: ['lite', 'ppi']
+    steps:
+      - uses: actions/checkout@v4
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: ${{ matrix.perl }}
+      - name: Install PPI for structural parsing jobs
+        if: matrix.parser == 'ppi'
+        run: cpanm --notest PPI
+      - name: Test distribution
+        run: |
+          perl Makefile.PL
+          make
+          make test
+          prove -Ilib -v t
+      - name: Verify command and standalone report
+        run: |
+          perl bin/perl-codemap --root examples/sample --parser ${{ matrix.parser }} --output example.html --json example.json
+          test -s example.html
+          test -s example.json
+  frontend:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: JavaScript syntax and DOM smoke checks
+        run: |
+          node --check lib/Perl/CodeMap/assets/app.js
+          node t/browser-smoke.js
