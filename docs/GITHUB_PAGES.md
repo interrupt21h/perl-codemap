@@ -17,9 +17,9 @@ CodeMap itself, served as the site's `index.html`.
    tests, builds `_site/index.html`, uploads it as a Pages artifact, and then
    deploys it to the `github-pages` environment.
 
-The default URL for a project repository is normally:
+The live sample is published at:
 
-    https://YOUR-USERNAME.github.io/perl-codemap/
+**[https://interrupt21h.github.io/perl-codemap/](https://interrupt21h.github.io/perl-codemap/)**
 
 The deploy job publishes its actual URL in the GitHub Actions deployment
 summary and the repository's **Settings → Pages** view.
