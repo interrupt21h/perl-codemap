@@ -30,6 +30,11 @@ WriteMakefile(
     },
     META_MERGE => {
         recommends => { PPI => '1.291' },
+        resources => {
+            homepage => 'https://github.com/interrupt21h/perl-codemap',
+            repository => { type => 'git', url => 'https://github.com/interrupt21h/perl-codemap.git', web => 'https://github.com/interrupt21h/perl-codemap' },
+            bugtracker => { web => 'https://github.com/interrupt21h/perl-codemap/issues' },
+        },
     },
     clean => { FILES => 'perl-code-map.html perl-code-map.json' },
 );

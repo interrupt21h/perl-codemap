@@ -1,6 +1,7 @@
 .editorconfig
 .gitattributes
 .github/workflows/ci.yml
+.github/workflows/release.yml
 .gitignore
 CHANGELOG.md
 CONTRIBUTING.md
@@ -18,6 +19,7 @@ docs/DEVELOPMENT.md
 docs/GITHUB_PAGES.md
 docs/JSON_FORMAT.md
 docs/PUBLISHING.md
+docs/RELEASING.md
 docs/USER_GUIDE.md
 docs/assets/example-map.png
 examples/demo.html

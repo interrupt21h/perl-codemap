@@ -1,0 +1,126 @@
+name: Release v0.3.0
+on:
+  push:
+    branches: [main]
+    paths: ['.github/workflows/release.yml']
+  workflow_dispatch:
+permissions:
+  contents: read
+concurrency:
+  group: perl-codemap-v0.3.0-release
+  cancel-in-progress: false
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    permissions:
+      contents: write
+    steps:
+      - uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+      - uses: shogo82148/actions-setup-perl@v1
+        with:
+          perl-version: '5.40'
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+      - name: Verify expected release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          test "$GITHUB_REF" = 'refs/heads/main'
+          version="$(perl -Ilib -MPerl::CodeMap -e 'print $Perl::CodeMap::VERSION')"
+          test "$version" = '0.3.0'
+          if gh release view v0.3.0 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
+            echo 'Release already exists; refusing to overwrite it.' >&2
+            exit 1
+          fi
+          echo "VERSION=$version" >> "$GITHUB_ENV"
+      - name: Install PPI
+        run: cpanm --notest PPI
+      - name: Test and build distribution
+        shell: bash
+        run: |
+          set -euo pipefail
+          perl Makefile.PL
+          make
+          make test
+          node --check lib/Perl/CodeMap/assets/app.js
+          node t/browser-smoke.js
+          make distcheck
+          make disttest
+          make dist
+      - name: Validate archive and checksum
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive="Perl-CodeMap-${VERSION}.tar.gz"
+          test -s "$archive"
+          tar -tzf "$archive" > /tmp/codemap-release-contents.txt
+          grep -Fx "Perl-CodeMap-${VERSION}/bin/perl-codemap" /tmp/codemap-release-contents.txt
+          grep -Fx "Perl-CodeMap-${VERSION}/lib/Perl/CodeMap/assets/prism-perl.min.js" /tmp/codemap-release-contents.txt
+          grep -Fx "Perl-CodeMap-${VERSION}/META.json" /tmp/codemap-release-contents.txt
+          grep -Fx "Perl-CodeMap-${VERSION}/docs/RELEASING.md" /tmp/codemap-release-contents.txt
+          sha256sum "$archive" > "$archive.sha256"
+      - name: Tag tested commit
+        shell: bash
+        run: |
+          set -euo pipefail
+          if git show-ref --verify --quiet refs/tags/v0.3.0; then
+            test "$(git rev-parse 'v0.3.0^{commit}')" = "$GITHUB_SHA" || {
+              echo 'v0.3.0 exists at a different commit' >&2
+              exit 1
+            }
+          else
+            git config user.name 'github-actions[bot]'
+            git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+            git tag -a v0.3.0 -m 'Perl CodeMap 0.3.0'
+            git push origin refs/tags/v0.3.0
+          fi
+      - name: Write release notes
+        shell: bash
+        run: |
+          cat > /tmp/codemap-notes.md <<'NOTES'
+          ## Perl CodeMap 0.3.0 — initial public release
+
+          Generate an interactive, self-contained architecture map for Perl source trees.
+
+          ### Highlights
+          - Static package dependency graph with namespace navigation and cycle-aware layering.
+          - Searchable modules, subroutines, and file/line locations.
+          - Bundled offline syntax-highlighted Perl source browser.
+          - Standalone HTML and JSON output, without executing source files.
+          - Synthetic public example: https://interrupt21h.github.io/perl-codemap/
+
+          ### Installation
+          Download the attached Perl-CodeMap-0.3.0.tar.gz:
+
+          ```sh
+          tar -xzf Perl-CodeMap-0.3.0.tar.gz
+          cd Perl-CodeMap-0.3.0
+          perl Makefile.PL
+          make
+          make test
+          make install
+          ```
+
+          Install PPI separately for accurate structural parsing: `cpanm PPI`.
+          The dependency-free lite mode is heuristic.
+          Verify the downloaded archive with the attached SHA-256 file.
+
+          GitHub distribution only; this release has not been uploaded to CPAN.
+          NOTES
+      - name: Publish release
+        env:
+          GH_TOKEN: ${{ github.token }}
+        shell: bash
+        run: |
+          set -euo pipefail
+          archive="Perl-CodeMap-${VERSION}.tar.gz"
+          gh release create v0.3.0 "$archive" "$archive.sha256" \
+            --repo "$GITHUB_REPOSITORY" \
+            --verify-tag \
+            --title 'Perl CodeMap 0.3.0' \
+            --notes-file /tmp/codemap-notes.md
