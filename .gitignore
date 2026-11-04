@@ -27,3 +27,4 @@ example.json
 .idea/
 .DS_Store
 *.log
+_site/

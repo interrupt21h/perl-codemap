@@ -56,6 +56,24 @@ perl bin/perl-codemap --root examples/sample --parser lite \
 
 Open `example.html` locally. It contains sample application code only.
 
+## Public live demo on GitHub Pages
+
+The GitHub Actions workflow publishes a **regenerated** interactive report
+from `examples/sample/` to GitHub Pages on successful pushes to `main`.
+The Perl and JavaScript CI test jobs must pass before the deployment starts.
+The published root page (`index.html`) **is** the interactive demo; no
+web server or build tool is required on the client.
+
+To enable deployment, open **Settings → Pages → Build and deployment →
+Source → GitHub Actions** in your GitHub repository, then push to `main`.
+For a normal project repository named `perl-codemap`, the site will typically
+be available at `https://YOUR-USERNAME.github.io/perl-codemap/`.
+
+The workflow deliberately scans only the synthetic example and uploads
+only `_site`, never the repository root, JSON exports, or internal source trees.
+See [GitHub Pages deployment](docs/GITHUB_PAGES.md) for setup, troubleshooting
+and safety considerations.
+
 ## Scan an actual project
 
 ```sh

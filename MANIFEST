@@ -5,6 +5,7 @@
 CHANGELOG.md
 CONTRIBUTING.md
 LICENSE
+MANIFEST
 MANIFEST.SKIP
 Makefile.PL
 NOTICE.md
@@ -14,6 +15,7 @@ bin/perl-codemap
 cpanfile
 docs/ARCHITECTURE.md
 docs/DEVELOPMENT.md
+docs/GITHUB_PAGES.md
 docs/JSON_FORMAT.md
 docs/PUBLISHING.md
 docs/USER_GUIDE.md
@@ -47,4 +49,3 @@ t/25-security.t
 t/30-cli.t
 t/40-ppi.t
 t/browser-smoke.js
-MANIFEST

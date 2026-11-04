@@ -64,3 +64,18 @@ git push origin v0.3.0
 
 Attach an archive of the tagged public source distribution to the release. Do
 not attach `code-map.json` or reports generated from real private code.
+
+## Publishing the interactive sample with GitHub Pages
+
+The existing `.github/workflows/ci.yml` includes `build-pages` and
+`deploy-pages` jobs. On a successful push to `main`, they generate
+`_site/index.html` from the **synthetic** files under `examples/sample/`,
+then deploy that one-page site using the official GitHub Pages actions.
+
+Enable **Settings → Pages → Build and deployment → Source: GitHub Actions**
+once after creating the repository. No `gh-pages` branch, personal access
+token, stored credential, or custom domain is needed.
+
+The workflow will not deploy from pull requests or feature branches.
+See [GITHUB_PAGES.md](GITHUB_PAGES.md) for details and security notes.
+

@@ -42,3 +42,53 @@ jobs:
         run: |
           node --check lib/Perl/CodeMap/assets/app.js
           node t/browser-smoke.js
+
+  # Only the synthetic example is published. Existing Perl and JS CI jobs
+  # must all succeed before the Pages artifact is prepared.
+  build-pages:
+    name: Build public sample for GitHub Pages
+    needs: [perl, frontend]
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+      - name: Generate standalone demo from synthetic fixture
+        run: |
+          mkdir -p _site
+          perl bin/perl-codemap \
+            --root examples/sample \
+            --parser lite \
+            --include-tests \
+            --name 'Perl CodeMap - Live Demo' \
+            --output _site/index.html
+          test -s _site/index.html
+          grep -q 'Demo::App' _site/index.html
+          touch _site/.nojekyll
+      - name: Configure Pages
+        uses: actions/configure-pages@v5
+      - name: Upload only the generated sample
+        uses: actions/upload-pages-artifact@v4
+        with:
+          path: _site
+
+  deploy-pages:
+    name: Deploy sample to GitHub Pages
+    needs: build-pages
+    if: github.event_name == 'push' && github.ref == 'refs/heads/main'
+    runs-on: ubuntu-latest
+    permissions:
+      pages: write
+      id-token: write
+    environment:
+      name: github-pages
+      url: ${{ steps.deployment.outputs.page_url }}
+    concurrency:
+      group: github-pages
+      cancel-in-progress: false
+    steps:
+      - name: Deploy Pages artifact
+        id: deployment
+        uses: actions/deploy-pages@v4

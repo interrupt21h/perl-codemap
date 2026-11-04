@@ -13,3 +13,4 @@
 ^example\.html$
 ^example\.json$
 ^perl-code-map.*\.(?:html|json)$
+^_site/
