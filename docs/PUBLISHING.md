@@ -77,5 +77,6 @@ once after creating the repository. No `gh-pages` branch, personal access
 token, stored credential, or custom domain is needed.
 
 The workflow will not deploy from pull requests or feature branches.
+The live sample is available at **[https://interrupt21h.github.io/perl-codemap/](https://interrupt21h.github.io/perl-codemap/)**.
 See [GITHUB_PAGES.md](GITHUB_PAGES.md) for details and security notes.
 
