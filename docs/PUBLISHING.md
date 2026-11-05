@@ -5,10 +5,18 @@
 - Public repository: https://github.com/interrupt21h/perl-codemap/
 - Live sample: https://interrupt21h.github.io/perl-codemap/
 - GitHub releases: https://github.com/interrupt21h/perl-codemap/releases
+- CPAN distribution: https://metacpan.org/dist/Perl-CodeMap
+- CPAN module documentation: https://metacpan.org/pod/Perl::CodeMap
+- PAUSE author: MULLER (Scott Muller), https://metacpan.org/author/MULLER
 
-The repository is already public and its initial v0.3.0 release was published
-on GitHub. For new versions, follow [RELEASING.md](RELEASING.md), rather than
-reinitializing the repository or rerunning the original bootstrap procedure.
+The repository is public. The v0.3.1 distribution was uploaded to CPAN and
+successfully indexed by PAUSE as `Perl::CodeMap` on 2026-11-05.
+PAUSE accepted `Perl-CodeMap-0.3.1.tar.gz` from author `MULLER` and
+reported "Status of this distro: OK" and "The package was indexed successfully."
+
+Users can install it with `cpanm Perl::CodeMap`; `PPI` is optional but
+recommended. For future releases, follow [RELEASING.md](RELEASING.md) rather
+than reinitializing the repository.
 
 ## Before publishing
 
@@ -51,9 +59,11 @@ checksum. Do not overwrite an existing version or force-move a published tag.
 The workflow can be started through **Actions → Release → Run workflow** after
 the version and changelog are committed to `main`.
 
-Do not publish a GitHub release archive to PAUSE automatically. A CPAN upload
-requires PAUSE credentials and separate verification; see
-[RELEASING.md](RELEASING.md).
+CPAN publication remains a separate manual step. Upload the **same tested
+GitHub release tarball** to PAUSE using the `MULLER` account, then confirm
+the acknowledgment and namespace-indexer reports. Do not create a second
+archive under the same version or add PAUSE credentials to public workflows.
+See [RELEASING.md](RELEASING.md).
 
 ## GitHub Pages
 

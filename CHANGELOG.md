@@ -18,7 +18,9 @@ All notable changes to this project will be documented here. Versioning follows
 ### Notes
 
 - Maintenance/metadata release. No breaking public API changes.
-- Published as a GitHub distribution; PAUSE/CPAN upload is a separate step.
+- Published on GitHub and uploaded to CPAN by Scott Muller (PAUSE author
+  `MULLER`) on 2026-11-05; the PAUSE namespace indexer successfully indexed
+  `Perl::CodeMap`.
 
 ## [0.3.0] - 2026-11-04
 

@@ -2,13 +2,22 @@
 
 ## Installation paths
 
-Run directly from the checkout with `perl bin/perl-codemap`, or install with
-`perl Makefile.PL && make && make test && make install` to get the
-`perl-codemap` command. Perl 5.20+ is supported. PPI is strongly recommended:
+The published [Perl::CodeMap](https://metacpan.org/pod/Perl::CodeMap)
+distribution is available on [CPAN](https://metacpan.org/dist/Perl-CodeMap)
+under PAUSE author [MULLER](https://metacpan.org/author/MULLER).
+
+Install on Perl 5.20 or newer:
 
 ```sh
-cpanm PPI
+cpanm Perl::CodeMap
+cpanm PPI  # strongly recommended for accurate parsing
+perl-codemap --version
 ```
+
+For development, run directly from the checkout with
+`perl bin/perl-codemap`, or build from source using
+`perl Makefile.PL && make && make test && make install`.
+
 
 The `auto` parser uses PPI when installed, otherwise the lite parser. To require
 PPI explicitly, pass `--parser ppi`; the command fails clearly if unavailable.
@@ -79,14 +88,16 @@ public Pages publishing:
 perl-codemap:
   image: perl:5.40
   script:
-    - cpanm --notest PPI
-    - perl bin/perl-codemap --parser ppi --root . --output map.html --json map.json
+    - cpanm --notest Perl::CodeMap PPI
+    - perl-codemap --parser ppi --root . --output map.html --json map.json
   artifacts:
     paths: [map.html, map.json]
     expire_in: 7 days
 ```
 
-This example assumes CodeMap is committed or available in the build workspace.
+This example installs CodeMap from CPAN and assumes CPAN access from CI.
+For reproducibility, pin the distribution version or install a verified
+release archive; never publish reports generated from private source trees.
 
 ## Troubleshooting
 

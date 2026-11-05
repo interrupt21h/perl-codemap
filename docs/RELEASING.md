@@ -5,6 +5,9 @@
 - Source: https://github.com/interrupt21h/perl-codemap
 - Releases: https://github.com/interrupt21h/perl-codemap/releases
 - Live sample: https://interrupt21h.github.io/perl-codemap/
+- CPAN distribution: https://metacpan.org/dist/Perl-CodeMap
+- CPAN module: https://metacpan.org/pod/Perl::CodeMap
+- PAUSE author: MULLER, https://metacpan.org/author/MULLER
 
 ## Versioning
 
@@ -48,9 +51,9 @@ After committing version and documentation changes to `main`, open
 6. Creates a published GitHub release with tarball, SHA-256 checksum, notes,
    and links to the live demo and maintainer.
 
-The v0.3.1 maintenance release also runs automatically when the upgraded
-release workflow first lands on `main`. Future releases should be initiated
-deliberately with **Run workflow** after the version and changelog are updated.
+The v0.3.1 maintenance release has already been published. Future releases
+should be initiated deliberately with **Run workflow** after the version and
+changelog are updated.
 A tag that points elsewhere causes a hard failure rather than being moved.
 
 If a failure occurs, review the workflow logs. A partially successful attempt
@@ -59,14 +62,28 @@ still points at the same tested commit**.
 
 ## CPAN / PAUSE
 
-GitHub publication does not upload to CPAN. A separate PAUSE account,
-namespace/indexing review, and manual archive upload are required.
-The CPAN distribution metadata names Scott Muller <scott@21h.io> as author.
+**Initial CPAN publication completed:** `Perl-CodeMap-0.3.1.tar.gz` was
+uploaded on 2026-11-05 by PAUSE account **MULLER (Scott Muller)**. The namespace
+indexer reported **Status of this distro: OK** and successfully indexed
+`Perl::CodeMap` (normalized version `0.003001`). The uploaded SHA-256
+matched the GitHub v0.3.1 release:
+`6a161d6cb14f880641c857237f7144b6589627d28077d19b5a4b44e35d1d4e5b`.
 
-Keep PAUSE credentials out of the Git repository and never place them in a
-public CI job. If PAUSE upload automation is later introduced, protect it with
-a separate manually approved GitHub environment and upload the already-tested
-release archive.
+For each subsequent CPAN release:
+
+1. Publish a new, immutable versioned tarball through GitHub Actions.
+2. Download and verify its accompanying SHA-256 checksum.
+3. Sign in to [PAUSE](https://pause.perl.org/) as `MULLER` and upload that
+   **exact** tarball. Do not rebuild or alter it after GitHub publication.
+4. Check both the PAUSE upload acknowledgment and the namespace indexer report.
+   Confirm that `Perl::CodeMap` is indexed at the expected version.
+5. Verify the distribution at [MetaCPAN](https://metacpan.org/dist/Perl-CodeMap)
+   and check [CPAN Testers](https://matrix.cpantesters.org/?dist=Perl-CodeMap).
+
+PAUSE author metadata identifies Scott Muller <scott@21h.io>.
+Keep PAUSE credentials out of the Git repository and public CI logs.
+If uploads are later automated, use a separately approved protected environment
+and publish only the already-tested archive.
 
 ## Private source safety
 

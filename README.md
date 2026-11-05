@@ -11,6 +11,13 @@ Inspired by [peterretief/codemap](https://github.com/peterretief/codemap),
 reimagined for Perl applications that may have multiple packages per file,
 interconnected libraries, and circular dependencies.
 
+[![CPAN version](https://img.shields.io/cpan/v/Perl-CodeMap.svg)](https://metacpan.org/dist/Perl-CodeMap)
+[![MetaCPAN](https://img.shields.io/badge/MetaCPAN-Perl%3A%3ACodeMap-blue)](https://metacpan.org/pod/Perl::CodeMap)
+
+**Available on CPAN:** [Perl-CodeMap](https://metacpan.org/dist/Perl-CodeMap),
+published by [Scott Muller (MULLER)](https://metacpan.org/author/MULLER).
+Try the [live interactive sample](https://interrupt21h.github.io/perl-codemap/).
+
 ![Perl CodeMap synthetic example](docs/assets/example-map.png)
 
 ## Features
@@ -35,6 +42,23 @@ interconnected libraries, and circular dependencies.
 - Perl core modules (including JSON::PP and ExtUtils::MakeMaker).
 - [PPI](https://metacpan.org/pod/PPI) **recommended** for accurate static parsing.
 - A modern browser for the report. JavaScript is required; network access is not.
+
+## Install from CPAN
+
+Install the published distribution using [cpanm](https://metacpan.org/pod/App::cpanminus):
+
+```sh
+cpanm Perl::CodeMap
+cpanm PPI  # recommended for accurate structural parsing
+perl-codemap --version
+perl-codemap --help
+```
+
+The published module is [Perl::CodeMap](https://metacpan.org/pod/Perl::CodeMap)
+and the installed command is `perl-codemap`. `PPI` is a recommended,
+optional dependency; without it, CodeMap can use its limited lite parser.
+Use a local Perl environment (for example, `local::lib`) if you do not have
+permission to install into the system Perl.
 
 ## Install from the repository
 
@@ -178,7 +202,7 @@ Read [SECURITY.md](SECURITY.md) before publishing artifacts or enabling CI.
 - [JSON data format](docs/JSON_FORMAT.md)
 - [Development and release process](docs/DEVELOPMENT.md)
 - [Versioned release procedure](docs/RELEASING.md)
-- [Public repository publishing guide](docs/PUBLISHING.md)
+- [Public repository and CPAN publishing guide](docs/PUBLISHING.md)
 - [Contributing](CONTRIBUTING.md)
 - [Security policy](SECURITY.md)
 - [Changelog](CHANGELOG.md)

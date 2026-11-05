@@ -66,8 +66,11 @@ make disttest
 
 The release workflow installs PPI, builds the CPAN-compatible tarball, verifies
 the generated author metadata, tags the tested commit, and uploads a tarball
-plus SHA-256 checksum to GitHub Releases. See
-[RELEASING.md](RELEASING.md) for the workflow, immutability, and CPAN steps.
+plus SHA-256 checksum to GitHub Releases. Since v0.3.1, the distribution is
+also published on [CPAN](https://metacpan.org/dist/Perl-CodeMap) by PAUSE author
+[MULLER](https://metacpan.org/author/MULLER). Each future CPAN upload is a
+separate, manual publication of the identical tested GitHub release tarball.
+See [RELEASING.md](RELEASING.md) for the workflow, immutability, and PAUSE steps.
 Generated reports from real source trees must **not** be part of public releases.
 
 ## Maintainer
