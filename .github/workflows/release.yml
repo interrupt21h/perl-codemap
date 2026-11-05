@@ -65,7 +65,8 @@ jobs:
           make
           make test
           prove -Ilib xt/author/pod.t
-          test -s blib/man1/perl-codemap.1p
+          perl -MPod::Man -e 'Pod::Man->new(section => 1, release => "Perl CodeMap")->parse_from_file("bin/perl-codemap", "/tmp/perl-codemap.1")'
+          test -s /tmp/perl-codemap.1
           node --check lib/Perl/CodeMap/assets/app.js
           node t/browser-smoke.js
           make distcheck
