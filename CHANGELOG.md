@@ -3,6 +3,34 @@
 All notable changes to this project will be documented here. Versioning follows
 [Semantic Versioning](https://semver.org/).
 
+## [0.3.2] - 2026-11-05
+
+### Added
+
+- Complete command-line POD documentation covering installation, synopsis,
+  parser configuration, all options, source/JSON export, examples, error
+  statuses, limitations, security considerations, and links to project resources.
+- `perl-codemap --man` and POD-driven `--help`, removing duplicated CLI help text.
+- Expanded `Perl::CodeMap` POD covering constructor options, all four public
+  methods, result structure, failure behavior, and module usage examples.
+- Automatic section 1 executable man page generation in the CPAN distribution.
+- Regression tests validating CLI documentation, module POD syntax, public
+  method reference, and `--help`/`--man` output; additional author POD checks.
+
+### Changed
+
+- Declare `Pod::Usage` at runtime and POD testing dependencies for development.
+- Integrate release-time documentation coverage and man-page checks.
+- Use the matching changelog entry to generate GitHub release notes.
+- Cross-link module, CLI, GitHub, CPAN, and live demonstration documentation.
+
+### Notes
+
+- Documentation and CLI usability maintenance release. No breaking analyzer
+  changes or JSON format changes.
+- GitHub release does not automatically upload to PAUSE; upload the verified
+  release tarball through your MULLER account for MetaCPAN to reflect it.
+
 ## [0.3.1] - 2026-11-05
 
 ### Changed

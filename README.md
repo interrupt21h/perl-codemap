@@ -60,6 +60,23 @@ optional dependency; without it, CodeMap can use its limited lite parser.
 Use a local Perl environment (for example, `local::lib`) if you do not have
 permission to install into the system Perl.
 
+## CLI and module documentation
+
+The installed application includes an extensive Perl POD manual:
+
+```sh
+perl-codemap --help           # synopsis and every CLI option
+perl-codemap --man            # full manual, examples, return codes, privacy
+perldoc perl-codemap          # installed command manual
+perldoc Perl::CodeMap         # constructor, public API, output data, errors
+man perl-codemap              # Unix manual page (when installed)
+```
+
+The documentation shown by `--help`, `--man`, `perldoc`, and the generated
+man page comes from the same embedded command POD. The
+[Perl::CodeMap API on MetaCPAN](https://metacpan.org/pod/Perl::CodeMap)
+documents all public methods, plus complete CLI quick-start instructions.
+
 ## Install from the repository
 
 ```sh
@@ -198,6 +215,7 @@ Read [SECURITY.md](SECURITY.md) before publishing artifacts or enabling CI.
 ## Project documentation
 
 - [User guide and CLI](docs/USER_GUIDE.md)
+- [Installed CLI manual](bin/perl-codemap) (POD; use `perl-codemap --man`)
 - [Architecture and limitations](docs/ARCHITECTURE.md)
 - [JSON data format](docs/JSON_FORMAT.md)
 - [Development and release process](docs/DEVELOPMENT.md)

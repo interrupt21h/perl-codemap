@@ -26,7 +26,12 @@ WriteMakefile(
         'Getopt::Long' => 0,
         'IPC::Open3' => 0,
         'JSON::PP' => 0,
+        'Pod::Usage' => 0,
         'Symbol' => 0,
+    },
+    TEST_REQUIRES => {
+        'Pod::Simple' => 0,
+        'Test::More' => 0,
     },
     META_MERGE => {
         recommends => { PPI => '1.291' },

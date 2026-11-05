@@ -15,8 +15,11 @@ PAUSE accepted `Perl-CodeMap-0.3.1.tar.gz` from author `MULLER` and
 reported "Status of this distro: OK" and "The package was indexed successfully."
 
 Users can install it with `cpanm Perl::CodeMap`; `PPI` is optional but
-recommended. For future releases, follow [RELEASING.md](RELEASING.md) rather
-than reinitializing the repository.
+recommended. Since v0.3.2, the CPAN distribution also includes detailed POD
+for the [Perl module API](https://metacpan.org/pod/Perl::CodeMap) and the
+executable (`perl-codemap --help`, `perl-codemap --man`, and
+`perldoc perl-codemap`). For future releases, follow
+[RELEASING.md](RELEASING.md) rather than reinitializing the repository.
 
 ## Before publishing
 

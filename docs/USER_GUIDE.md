@@ -22,6 +22,24 @@ For development, run directly from the checkout with
 The `auto` parser uses PPI when installed, otherwise the lite parser. To require
 PPI explicitly, pass `--parser ppi`; the command fails clearly if unavailable.
 
+## Embedded CLI and Perl API manuals
+
+Perl CodeMap ships complete embedded Perl POD, available immediately after
+installation from CPAN:
+
+```sh
+perl-codemap --help              # CLI synopsis and all options
+perl-codemap --man               # full manual, examples, exit statuses
+perldoc perl-codemap             # installed executable's POD
+perldoc Perl::CodeMap            # documented Perl library API
+man perl-codemap                 # Unix section 1 man page
+```
+
+The CLI manual is embedded in `bin/perl-codemap`; the library manual is
+embedded in `lib/Perl/CodeMap.pm`, which MetaCPAN renders as the primary
+[Perl::CodeMap documentation](https://metacpan.org/pod/Perl::CodeMap).
+These are the canonical references, rather than the table below.
+
 ## CLI reference
 
 | Option | Description | Default |
@@ -38,7 +56,8 @@ PPI explicitly, pass `--parser ppi`; the command fails clearly if unavailable.
 | `--source-base URL` | Repository URL prefix for relative paths | GitHub auto-detection when possible |
 | `--name TITLE` | Report name | scanned root basename |
 | `--version` | Print version | — |
-| `--help` | Display usage | — |
+| `--help` | Display usage and option descriptions from POD | — |
+| `--man` | Display the complete embedded CLI manual | — |
 
 A report contains all discovered *internal* package dependencies; standard
 library and CPAN packages are not drawn as graph nodes unless they exist in the

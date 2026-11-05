@@ -9,6 +9,10 @@ make test
 prove -Ilib -v t
 node --check lib/Perl/CodeMap/assets/app.js
 node t/browser-smoke.js
+prove -Ilib t/60-pod.t           # built-in POD syntax and CLI help tests
+# Optional author checks:
+cpanm Test::Pod Test::Pod::Coverage
+prove -Ilib xt/author/pod.t
 perl bin/perl-codemap --root examples/sample --parser lite \
   --output example.html --json example.json
 ```
@@ -38,6 +42,20 @@ PERL5LIB=blib/lib perl blib/script/perl-codemap \
 
 The assets reside under `lib/Perl/CodeMap/assets` and are copied by
 `Makefile.PL` to the Perl library path, so installed CLI scripts can find them.
+
+## Documentation quality
+
+Both the command and library contain their own POD manual. When changing an
+option or public method, update the relevant POD and accompanying tests in
+the same change. The command's `--help` and `--man` now render from POD through
+`Pod::Usage`; do not introduce a separate help text string.
+
+The standard test suite validates POD syntax using core `Pod::Simple::Checker`,
+checks every supported CLI option and public API method is documented, and
+runs both CLI documentation modes. Optional author checks under `xt/author/`
+use `Test::Pod` and `Test::Pod::Coverage` and run as part of GitHub's release
+workflow. The distribution automatically builds the executable's Unix man
+page through MakeMaker's `EXE_FILES` handling.
 
 ## Review requirements
 

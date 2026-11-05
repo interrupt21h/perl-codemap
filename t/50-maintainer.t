@@ -15,7 +15,7 @@ sub read_file {
     return <$fh>;
 }
 
-is($Perl::CodeMap::VERSION, '0.3.1', 'maintenance release version');
+is($Perl::CodeMap::VERSION, '0.3.2', 'maintenance release version');
 like(read_file('Makefile.PL'), qr/AUTHOR\s*=>\s*'Scott Muller <scott\@21h\.io>'/,
     'CPAN distribution lists Scott Muller and email');
 like(read_file('LICENSE'), qr/Copyright \(c\) 2026 Scott Muller/,

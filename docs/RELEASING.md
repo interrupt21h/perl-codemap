@@ -34,8 +34,13 @@ make disttest
 ```
 
 The release workflow repeats these checks on GitHub Actions, including the
-PPI parser, tests the dist tarball, verifies `META.json` author metadata, and
-writes a SHA-256 checksum.
+PPI parser and documentation author tests, verifies the generated Unix
+`perl-codemap(1)` man page, tests the dist tarball, verifies `META.json`
+author metadata, and writes a SHA-256 checksum.
+
+Every CLI option and public Perl method must have corresponding POD:
+`bin/perl-codemap` for CLI users and `lib/Perl/CodeMap.pm` for MetaCPAN.
+Update the POD and documentation tests before publishing a new CPAN archive.
 
 ## Publish on GitHub
 
@@ -51,9 +56,11 @@ After committing version and documentation changes to `main`, open
 6. Creates a published GitHub release with tarball, SHA-256 checksum, notes,
    and links to the live demo and maintainer.
 
-The v0.3.1 maintenance release has already been published. Future releases
-should be initiated deliberately with **Run workflow** after the version and
-changelog are updated.
+The v0.3.1 maintenance release has already been published. The v0.3.2
+documentation release runs when the release workflow upgrade is committed
+to `main`. Subsequent releases should be initiated deliberately with
+**Run workflow** after the version and changelog are updated. Release notes
+are generated from the matching `CHANGELOG.md` entry.
 A tag that points elsewhere causes a hard failure rather than being moved.
 
 If a failure occurs, review the workflow logs. A partially successful attempt

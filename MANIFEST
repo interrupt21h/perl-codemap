@@ -52,4 +52,6 @@ t/25-security.t
 t/30-cli.t
 t/40-ppi.t
 t/50-maintainer.t
+t/60-pod.t
 t/browser-smoke.js
+xt/author/pod.t
