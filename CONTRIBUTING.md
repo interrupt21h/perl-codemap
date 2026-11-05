@@ -1,5 +1,7 @@
 # Contributing to Perl CodeMap
 
+**Maintainer:** Scott Muller <scott@21h.io>.
+
 Issues, bug reports, documentation improvements and pull requests are welcome.
 
 For a bug report, include Perl version, PPI version (if installed), OS,

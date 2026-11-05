@@ -177,11 +177,18 @@ Read [SECURITY.md](SECURITY.md) before publishing artifacts or enabling CI.
 - [Architecture and limitations](docs/ARCHITECTURE.md)
 - [JSON data format](docs/JSON_FORMAT.md)
 - [Development and release process](docs/DEVELOPMENT.md)
+- [Versioned release procedure](docs/RELEASING.md)
 - [Public repository publishing guide](docs/PUBLISHING.md)
 - [Contributing](CONTRIBUTING.md)
 - [Security policy](SECURITY.md)
 - [Changelog](CHANGELOG.md)
 - [Attribution and notices](NOTICE.md)
+
+## Maintainer
+
+**Scott Muller** — [scott@21h.io](mailto:scott@21h.io).
+
+Issues, fixes, and contributions are welcome; see [CONTRIBUTING.md](CONTRIBUTING.md).
 
 ## License
 

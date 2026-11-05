@@ -1,5 +1,9 @@
 # Attribution and third-party notices
 
+**Author and maintainer:** Scott Muller <scott@21h.io>.
+
+Copyright © 2026 Scott Muller. Perl CodeMap is distributed under the MIT License.
+
 **Perl CodeMap** is a separate Perl implementation of the code-mapping concept
 popularized by [peterretief/codemap](https://github.com/peterretief/codemap),
 originally developed by Peter Retief. The upstream project is MIT licensed

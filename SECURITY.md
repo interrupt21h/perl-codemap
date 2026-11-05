@@ -7,11 +7,10 @@ versions may not receive patches.
 
 ## Reporting a vulnerability
 
-Please use your repository host's **private vulnerability reporting** feature
-(if enabled) or contact the project's maintainers privately. Do not open a
-public issue containing secrets, exploit details, or proprietary source. A
-public security contact address will be added when the repository owner
-selects one.
+Please use GitHub's **private vulnerability reporting** feature, if enabled,
+or contact **Scott Muller <scott@21h.io>** privately with the details.
+Do not open a public issue containing secrets, exploit details, or
+proprietary source code. Include a minimal synthetic reproduction when feasible.
 
 ## Threat model and restrictions
 

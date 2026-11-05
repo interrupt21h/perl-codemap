@@ -12,7 +12,7 @@ WriteMakefile(
     NAME => 'Perl::CodeMap',
     VERSION_FROM => 'lib/Perl/CodeMap.pm',
     ABSTRACT => 'Offline Perl dependency visualization and source explorer',
-    AUTHOR => 'Perl CodeMap contributors',
+    AUTHOR => 'Scott Muller <scott@21h.io>',
     LICENSE => 'mit',
     MIN_PERL_VERSION => '5.020',
     EXE_FILES => ['bin/perl-codemap'],

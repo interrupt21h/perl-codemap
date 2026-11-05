@@ -1,21 +1,27 @@
-name: Release v0.3.0
+name: Release
+
 on:
   push:
     branches: [main]
     paths: ['.github/workflows/release.yml']
   workflow_dispatch:
+
 permissions:
   contents: read
+
 concurrency:
-  group: perl-codemap-v0.3.0-release
+  group: perl-codemap-release
   cancel-in-progress: false
+
 jobs:
   release:
+    if: github.ref == 'refs/heads/main'
     runs-on: ubuntu-latest
     permissions:
       contents: write
     steps:
-      - uses: actions/checkout@v4
+      - name: Check out tested commit
+        uses: actions/checkout@v4
         with:
           fetch-depth: 0
       - uses: shogo82148/actions-setup-perl@v1
@@ -24,23 +30,34 @@ jobs:
       - uses: actions/setup-node@v4
         with:
           node-version: '22'
-      - name: Verify expected release
+
+      - name: Validate version and publication state
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
-          test "$GITHUB_REF" = 'refs/heads/main'
           version="$(perl -Ilib -MPerl::CodeMap -e 'print $Perl::CodeMap::VERSION')"
-          test "$version" = '0.3.0'
-          if gh release view v0.3.0 --repo "$GITHUB_REPOSITORY" >/dev/null 2>&1; then
-            echo 'Release already exists; refusing to overwrite it.' >&2
+          [[ "$version" =~ ^[0-9]+\.[0-9]+\.[0-9]+$ ]] || {
+            echo "Invalid semantic version: $version" >&2
+            exit 1
+          }
+          if [[ "$GITHUB_EVENT_NAME" == 'push' && "$version" != '0.3.1' ]]; then
+            echo 'Push-triggered publication is restricted to the v0.3.1 workflow upgrade.' >&2
+            exit 1
+          fi
+          test "$(git rev-parse HEAD)" = "$GITHUB_SHA"
+          if gh release view "v$version" --repo "$GITHUB_REPOSITORY" > /dev/null 2>&1; then
+            echo "The v$version release already exists. Never overwrite a public version." >&2
             exit 1
           fi
           echo "VERSION=$version" >> "$GITHUB_ENV"
-      - name: Install PPI
+          echo "Preparing Perl CodeMap $version by Scott Muller <scott@21h.io>"
+
+      - name: Install structural Perl parser
         run: cpanm --notest PPI
-      - name: Test and build distribution
+
+      - name: Validate and build the source distribution
         shell: bash
         run: |
           set -euo pipefail
@@ -52,75 +69,77 @@ jobs:
           make distcheck
           make disttest
           make dist
-      - name: Validate archive and checksum
+
+      - name: Audit distribution contents and author metadata
         shell: bash
         run: |
           set -euo pipefail
           archive="Perl-CodeMap-${VERSION}.tar.gz"
           test -s "$archive"
-          tar -tzf "$archive" > /tmp/codemap-release-contents.txt
-          grep -Fx "Perl-CodeMap-${VERSION}/bin/perl-codemap" /tmp/codemap-release-contents.txt
-          grep -Fx "Perl-CodeMap-${VERSION}/lib/Perl/CodeMap/assets/prism-perl.min.js" /tmp/codemap-release-contents.txt
-          grep -Fx "Perl-CodeMap-${VERSION}/META.json" /tmp/codemap-release-contents.txt
-          grep -Fx "Perl-CodeMap-${VERSION}/docs/RELEASING.md" /tmp/codemap-release-contents.txt
+          tar -tzf "$archive" > /tmp/codemap-files.txt
+          for path in AUTHORS.md LICENSE META.json bin/perl-codemap \
+                      docs/RELEASING.md lib/Perl/CodeMap/assets/prism-perl.min.js \
+                      t/50-maintainer.t; do
+            grep -Fx "Perl-CodeMap-${VERSION}/$path" /tmp/codemap-files.txt
+          done
+          tar -xzOf "$archive" "Perl-CodeMap-${VERSION}/META.json" |
+            perl -MJSON::PP -e '
+              local $/;
+              my $data = decode_json(<STDIN>);
+              my $authors = $data->{author} || [];
+              die "Incorrect CPAN metadata author\n" unless
+                ref($authors) eq "ARRAY" &&
+                grep { $_ eq "Scott Muller <scott\@21h.io>" } @$authors;
+              die "Incorrect CPAN metadata name\n" unless $data->{name} eq "Perl-CodeMap";
+              print "Validated author: ", join(", ", @$authors), "\n";
+            '
           sha256sum "$archive" > "$archive.sha256"
-      - name: Tag tested commit
+          sha256sum -c "$archive.sha256"
+
+      - name: Create immutable annotated tag
         shell: bash
         run: |
           set -euo pipefail
-          if git show-ref --verify --quiet refs/tags/v0.3.0; then
-            test "$(git rev-parse 'v0.3.0^{commit}')" = "$GITHUB_SHA" || {
-              echo 'v0.3.0 exists at a different commit' >&2
+          tag="v${VERSION}"
+          if git show-ref --verify --quiet "refs/tags/$tag"; then
+            test "$(git rev-parse "$tag^{commit}")" = "$GITHUB_SHA" || {
+              echo "Tag $tag belongs to a different commit: refusing to move it." >&2
               exit 1
             }
           else
             git config user.name 'github-actions[bot]'
             git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
-            git tag -a v0.3.0 -m 'Perl CodeMap 0.3.0'
-            git push origin refs/tags/v0.3.0
+            git tag -a "$tag" -m "Perl CodeMap ${VERSION}"
+            git push origin "refs/tags/$tag"
           fi
-      - name: Write release notes
+
+      - name: Prepare release notes
         shell: bash
         run: |
-          cat > /tmp/codemap-notes.md <<'NOTES'
-          ## Perl CodeMap 0.3.0 — initial public release
+          {
+            printf '## Perl CodeMap %s\n\n' "$VERSION"
+            printf 'Maintainer: **Scott Muller** (scott@21h.io).\n\n'
+            printf 'This maintenance release corrects CPAN author metadata, project copyright, '
+            printf 'module POD, and public documentation; no breaking API changes.\n\n'
+            printf '### Installation\n\n'
+            printf 'Download the attached Perl-CodeMap-%s.tar.gz and verify its SHA-256 checksum.\n\n' "$VERSION"
+            printf 'Install with: perl Makefile.PL && make && make test && make install.\n\n'
+            printf 'For accurate structural parsing, install the recommended PPI dependency.\n\n'
+            printf '### Links\n\n'
+            printf -- '- [Changelog](https://github.com/interrupt21h/perl-codemap/blob/v%s/CHANGELOG.md)\n' "$VERSION"
+            printf -- '- [Live interactive sample](https://interrupt21h.github.io/perl-codemap/)\n'
+            printf -- '- [Source repository](https://github.com/interrupt21h/perl-codemap)\n\n'
+            printf 'This release is distributed on GitHub; it has not been uploaded to CPAN.\n'
+          } > /tmp/codemap-release-notes.md
 
-          Generate an interactive, self-contained architecture map for Perl source trees.
-
-          ### Highlights
-          - Static package dependency graph with namespace navigation and cycle-aware layering.
-          - Searchable modules, subroutines, and file/line locations.
-          - Bundled offline syntax-highlighted Perl source browser.
-          - Standalone HTML and JSON output, without executing source files.
-          - Synthetic public example: https://interrupt21h.github.io/perl-codemap/
-
-          ### Installation
-          Download the attached Perl-CodeMap-0.3.0.tar.gz:
-
-          ```sh
-          tar -xzf Perl-CodeMap-0.3.0.tar.gz
-          cd Perl-CodeMap-0.3.0
-          perl Makefile.PL
-          make
-          make test
-          make install
-          ```
-
-          Install PPI separately for accurate structural parsing: `cpanm PPI`.
-          The dependency-free lite mode is heuristic.
-          Verify the downloaded archive with the attached SHA-256 file.
-
-          GitHub distribution only; this release has not been uploaded to CPAN.
-          NOTES
-      - name: Publish release
+      - name: Publish GitHub release with tested assets
         env:
           GH_TOKEN: ${{ github.token }}
         shell: bash
         run: |
           set -euo pipefail
           archive="Perl-CodeMap-${VERSION}.tar.gz"
-          gh release create v0.3.0 "$archive" "$archive.sha256" \
-            --repo "$GITHUB_REPOSITORY" \
-            --verify-tag \
-            --title 'Perl CodeMap 0.3.0' \
-            --notes-file /tmp/codemap-notes.md
+          gh release create "v${VERSION}" "$archive" "$archive.sha256" \
+            --repo "$GITHUB_REPOSITORY" --verify-tag \
+            --title "Perl CodeMap ${VERSION}" \
+            --notes-file /tmp/codemap-release-notes.md

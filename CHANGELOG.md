@@ -3,6 +3,23 @@
 All notable changes to this project will be documented here. Versioning follows
 [Semantic Versioning](https://semver.org/).
 
+## [0.3.1] - 2026-11-05
+
+### Changed
+
+- Set distribution author and public maintainer to Scott Muller <scott@21h.io>.
+- Update MIT copyright ownership and project-wide author attribution while
+  preserving Peter Retief's and PrismJS's original third-party credits.
+- Add maintainer contact and vulnerability reporting instructions.
+- Add author metadata checks for releases and generalize the GitHub Release
+  workflow for future versioned distributions.
+- Refresh release, publishing, and development documentation.
+
+### Notes
+
+- Maintenance/metadata release. No breaking public API changes.
+- Published as a GitHub distribution; PAUSE/CPAN upload is a separate step.
+
 ## [0.3.0] - 2026-11-04
 
 ### Added
@@ -18,6 +35,5 @@ All notable changes to this project will be documented here. Versioning follows
 
 ### Notes
 
-- This is an initial **public-ready source package**, not an assertion that it
-  has been published to any public repository or CPAN.
+- Initial GitHub source release. CPAN publication was not part of this release.
 - PPI-based parsing is recommended; the lite mode is explicitly heuristic.

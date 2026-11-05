@@ -51,20 +51,28 @@ before public publication.
 ## Versioning and releases
 
 We use semantic versions. Update `$Perl::CodeMap::VERSION`, `CHANGELOG.md`,
-and README/CLI docs when shipping user-visible changes. Run all tests, create
-an archive of tracked files, and create a Git tag, for example:
+and README/CLI docs when shipping user-visible changes. Validate on a clean
+checkout before running the **Release** GitHub Actions workflow from `main`:
 
 ```sh
 git status --short
 prove -Ilib t
 node t/browser-smoke.js
-perl Makefile.PL && make test
-git tag -a v0.3.0 -m 'Perl CodeMap 0.3.0'
-git push origin v0.3.0
+perl Makefile.PL
+make test
+make distcheck
+make disttest
 ```
 
-Use GitHub Releases or another Git host's release facility to publish source
-archives. Generated source reports should **not** be part of public releases.
+The release workflow installs PPI, builds the CPAN-compatible tarball, verifies
+the generated author metadata, tags the tested commit, and uploads a tarball
+plus SHA-256 checksum to GitHub Releases. See
+[RELEASING.md](RELEASING.md) for the workflow, immutability, and CPAN steps.
+Generated reports from real source trees must **not** be part of public releases.
+
+## Maintainer
+
+Scott Muller <scott@21h.io>.
 
 ## Licensing and provenance
 

@@ -1,82 +1,63 @@
-# Publishing Perl CodeMap to a public Git repository
+# Publishing Perl CodeMap
 
-This source distribution was prepared to be imported into a repository, but
-publishing is deliberately a separate, owner-controlled step.
+**Maintainer:** Scott Muller <scott@21h.io>.
 
-## Before making it public
+- Public repository: https://github.com/interrupt21h/perl-codemap/
+- Live sample: https://interrupt21h.github.io/perl-codemap/
+- GitHub releases: https://github.com/interrupt21h/perl-codemap/releases
 
-Confirm the Git repository contains **only code you are authorized to share**.
-The included `examples/sample/`, `examples/demo.html`, and
-`docs/assets/example-map.png` are generated from synthetic code. Do not add
-reports made from employer, customer, or other private source trees.
+The repository is already public and its initial v0.3.0 release was published
+on GitHub. For new versions, follow [RELEASING.md](RELEASING.md), rather than
+reinitializing the repository or rerunning the original bootstrap procedure.
 
-Review staged changes:
+## Before publishing
+
+Confirm changes and release artifacts contain only code you are authorized to
+share. The tracked `examples/sample/`, `examples/demo.html`, and
+`docs/assets/example-map.png` are synthetic. Generated reports may embed
+complete source files and must not be published if they contain proprietary
+code, secrets, or personal information.
 
 ```sh
 git status --short
-git diff --cached --stat
-git diff --cached --name-only
+git diff --stat
+git grep -n -E 'PASSWORD|TOKEN|PRIVATE_KEY' -- . ':!docs/PUBLISHING.md'
 ```
 
-Check the archive for accidentally staged reports, local credentials,
-internal domain names, absolute file paths and API tokens. Excluding
-`*.html` globally is not necessary: the included HTML demo is synthetic.
+The quick text search is illustrative; use a dedicated secret-scanning tool
+for a real security review.
 
-## Initialize and push
+## Repository metadata
 
-```sh
-cd perl-codemap
+**Name:** `interrupt21h/perl-codemap`.
 
-git init -b main
-git add .
-git diff --cached --stat
-git commit -m "Initial public release: Perl CodeMap 0.3.0"
+**Maintainer:** Scott Muller <scott@21h.io>.
 
-# Create a new, empty repository on your preferred Git host.
-# Example using GitHub CLI (requires you to sign in first):
-gh repo create perl-codemap --public --source=. --remote=origin --push
-```
+**Description:** Interactive code maps for Perl projects. Visualize package
+dependencies, explore modules and subroutines, and browse syntax-highlighted
+source code.
 
-If the host's user interface creates the remote, instead use `git remote add
-origin <your-new-repository-url>` followed by `git push -u origin main`.
+**Topics:** `perl`, `static-analysis`, `dependency-graph`,
+`code-visualization`, `ppi`, `software-architecture`, `code-browser`.
 
-## Repository metadata suggestions
+**License:** MIT; original Go CodeMap and PrismJS retain their respective
+third-party notices in `NOTICE.md` and the Prism license.
 
-**Description:** Interactive architecture and source-code maps for Perl
-applications — static analysis, dependency graphs, and offline source browsing.
+## Releasing
 
-**Topics:** `perl`, `static-analysis`, `dependency-graph`, `code-visualization`,
-`ppi`, `software-architecture`, `code-browser`.
+The GitHub **Release** workflow uses `$Perl::CodeMap::VERSION` and validates
+the matching version tag; it produces the distribution tarball and a SHA-256
+checksum. Do not overwrite an existing version or force-move a published tag.
+The workflow can be started through **Actions → Release → Run workflow** after
+the version and changelog are committed to `main`.
 
-**License:** MIT. **Issue tracker:** enabled. **Security reporting:** enable
-private vulnerability reports and add a maintainer contact address to
-`SECURITY.md`. **Actions:** enable CI after reviewing its permissions.
+Do not publish a GitHub release archive to PAUSE automatically. A CPAN upload
+requires PAUSE credentials and separate verification; see
+[RELEASING.md](RELEASING.md).
 
-## Tag and release
+## GitHub Pages
 
-Run `prove -Ilib t`, `node t/browser-smoke.js`, and `make test` before a
-release. Set an immutable version tag:
-
-```sh
-git tag -a v0.3.0 -m "Perl CodeMap 0.3.0"
-git push origin v0.3.0
-```
-
-Attach an archive of the tagged public source distribution to the release. Do
-not attach `code-map.json` or reports generated from real private code.
-
-## Publishing the interactive sample with GitHub Pages
-
-The existing `.github/workflows/ci.yml` includes `build-pages` and
-`deploy-pages` jobs. On a successful push to `main`, they generate
-`_site/index.html` from the **synthetic** files under `examples/sample/`,
-then deploy that one-page site using the official GitHub Pages actions.
-
-Enable **Settings → Pages → Build and deployment → Source: GitHub Actions**
-once after creating the repository. No `gh-pages` branch, personal access
-token, stored credential, or custom domain is needed.
-
-The workflow will not deploy from pull requests or feature branches.
-The live sample is available at **[https://interrupt21h.github.io/perl-codemap/](https://interrupt21h.github.io/perl-codemap/)**.
-See [GITHUB_PAGES.md](GITHUB_PAGES.md) for details and security notes.
-
+The existing CI workflow deploys a synthetic demo from `examples/sample/`
+to [https://interrupt21h.github.io/perl-codemap/](https://interrupt21h.github.io/perl-codemap/)
+on successful pushes to `main`. It publishes only `_site` and never scans
+employer or customer source trees. See [GITHUB_PAGES.md](GITHUB_PAGES.md).

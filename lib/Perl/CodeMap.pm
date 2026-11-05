@@ -11,7 +11,7 @@ use Encode qw(decode FB_DEFAULT);
 use IPC::Open3 ();
 use Symbol qw(gensym);
 
-our $VERSION = '0.3.0';
+our $VERSION = '0.3.1';
 
 sub new {
     my ($class, %arg) = @_;
@@ -451,8 +451,13 @@ subroutines and statically recognizable dependencies, and creates one
 self-contained interactive HTML report. PPI is preferred; the limited
 zero-dependency parser is an explicit fallback.
 
-=head1 LICENSE
+=head1 AUTHOR
 
-MIT. See LICENSE and NOTICE.md.
+Scott Muller <scott@21h.io>
+
+=head1 COPYRIGHT AND LICENSE
+
+Copyright (c) 2026 Scott Muller. This program is distributed under the
+MIT License. See LICENSE and NOTICE.md for attribution and third-party notices.
 
 =cut

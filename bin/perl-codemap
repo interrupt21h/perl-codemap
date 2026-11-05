@@ -47,6 +47,7 @@ Options:
   --help                    Print this help
 
 Tip: install PPI for structural parsing: cpanm PPI
+Maintainer: Scott Muller <scott@21h.io>
 The generated HTML and JSON may contain source code. Keep private projects private.
 HELP
     exit 0;
